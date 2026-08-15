@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: Real-Time Chat System
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 600000
+      connection-timeout: 20000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  cassandra:
+    keyspace-name: ${CASSANDRA_KEYSPACE}
+    contact-points: ${CASSANDRA_CONTACT_POINTS}
+    port: ${CASSANDRA_PORT}
+    local-datacenter: ${CASSANDRA_LOCAL_DATACENTER}
+    schema-action: create_if_not_exists
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+    redis:
+      host: localhost
+      port: 6379
+  threads:
+    virtual:
+      enabled: true
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#    consumer:
+#      group-id: chat-delivery-group
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      properties:
+#        spring.json.trusted.packages: "com.khaled.realtimechatsystem.kafka.event"
+#        spring.json.value.default.type: com.khaled.realtimechatsystem.kafka.event.MessageEvent
+
+#logging:
+#  level:
+#    org.apache.kafka.clients.consumer: DEBUG
+#    org.springframework.kafka.listener: DEBUG
+
+app:
+  security:
+    jwt:
+      access-token-expiration: 86400000 # 24 hours for local testing #900000 # 15 minutes
+      refresh-token-expiration: 604800000 # 7 days
+    disposable-email: 10minutemail,20minutemail,33mail,5ymail,anonbox,guerrillamail,mailinator,maildrop,mailnesia,moakt,my10minutemail,throwawaymail,trashmail,temp-mail,tempmail,truemail,yopmail
+  presence:
+    forward-channel: chat-delivery-forward
